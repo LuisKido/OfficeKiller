@@ -15,7 +15,7 @@
 <body>
 
   <header id="header">
-    <h1>🏢 Office Killer</h1>
+    <h1><i data-lucide="building-2" class="gi gi-lg"></i> Office Killer</h1>
     <div class="header-stats">
       <div class="stat">
         <span class="stat-label">Balance</span>
@@ -35,9 +35,9 @@
       </div>
     </div>
     <div class="header-actions">
-      <button id="btn-save" class="btn-secondary">💾 <span class="btn-label">Guardar</span></button>
-      <button id="btn-prestige" style="display:none">🌟 <span class="btn-label">Prestige</span></button>
-      <button id="btn-reset" class="btn-danger">🗑️ <span class="btn-label">Reiniciar</span></button>
+      <button id="btn-save" class="btn-secondary"><i data-lucide="save" class="gi"></i> <span class="btn-label">Guardar</span></button>
+      <button id="btn-prestige" style="display:none"><i data-lucide="star" class="gi"></i> <span class="btn-label">Prestige</span></button>
+      <button id="btn-reset" class="btn-danger"><i data-lucide="trash-2" class="gi"></i> <span class="btn-label">Reiniciar</span></button>
     </div>
   </header>
 
@@ -50,13 +50,13 @@
     <aside id="panel-left" class="tab-active">
       <div id="clicker-area">
         <div id="desk">
-          <span id="desk-icon">🖥️</span>
+          <span id="desk-icon"><i data-lucide="monitor" class="gi"></i></span>
           <p id="click-hint">Haz clic para ganar</p>
           <p id="click-income">+1 luca</p>
         </div>
       </div>
       <div id="news-panel">
-        <h3>📰 Noticias de empresa</h3>
+        <h3><i data-lucide="newspaper" class="gi"></i> Noticias de empresa</h3>
         <div id="news-feed"></div>
       </div>
     </aside>
@@ -67,30 +67,30 @@
       <!-- Barra de tabs interna -->
       <nav id="right-tabs">
         <button class="rtab-btn active" data-rtab="rtab-empresa">
-          🏗️ Empresa
+          <i data-lucide="briefcase" class="gi"></i> Empresa
         </button>
         <button class="rtab-btn" data-rtab="rtab-research">
-          🔬 Investigación
+          <i data-lucide="flask-conical" class="gi"></i> Investigación
         </button>
         <button class="rtab-btn" data-rtab="rtab-achievements">
-          🏆 Logros
+          <i data-lucide="trophy" class="gi"></i> Logros
         </button>
       </nav>
 
       <!-- Pestaña 1: Empresa (misiones, mejoras, departamentos) -->
       <div id="rtab-empresa" class="rtab-pane active">
         <div id="missions-section" style="display:none;">
-          <h2>📋 Misiones activas</h2>
+          <h2><i data-lucide="clipboard-list" class="gi"></i> Misiones activas</h2>
           <div id="missions-list"></div>
         </div>
 
         <div id="upgrades-section" style="display:none;">
-          <h2>⚡ Mejoras disponibles</h2>
+          <h2><i data-lucide="zap" class="gi"></i> Mejoras disponibles</h2>
           <div id="upgrades-list"></div>
         </div>
 
         <div id="departments-section">
-          <h2>🏗️ Departamentos</h2>
+          <h2><i data-lucide="building" class="gi"></i> Departamentos</h2>
           <div id="departments-list"></div>
         </div>
       </div>
@@ -98,7 +98,7 @@
       <!-- Pestaña 2: Investigación -->
       <div id="rtab-research" class="rtab-pane">
         <div id="research-section">
-          <h2>🔬 Investigación</h2>
+          <h2><i data-lucide="flask-conical" class="gi"></i> Investigación</h2>
           <p class="research-subtitle">Gasta recursos para desbloquear bonificaciones permanentes. Sobrevive al prestige.</p>
           <div id="research-grid" class="research-grid"></div>
         </div>
@@ -107,7 +107,7 @@
       <!-- Pestaña 3: Logros -->
       <div id="rtab-achievements" class="rtab-pane">
         <div id="achievements-section">
-          <h2>🏆 Logros</h2>
+          <h2><i data-lucide="trophy" class="gi"></i> Logros</h2>
           <p class="achievements-summary">0 / 39 desbloqueados</p>
           <div id="achievements-grid"></div>
         </div>
@@ -122,7 +122,7 @@
   <!-- Modal de prestige -->
   <div id="prestige-modal" class="modal-overlay" style="display:none">
     <div class="prestige-modal-box">
-      <h2>🌟 ¿Hacer Prestige?</h2>
+      <h2><i data-lucide="star" class="gi"></i> ¿Hacer Prestige?</h2>
       <p>Tu empresa ha alcanzado proporciones épicas. Es hora de vender acciones, reinvertir el capital y empezar de nuevo con un multiplicador permanente de ingresos.</p>
       <div class="prestige-reward">
         <span>Ganarás</span>
@@ -133,8 +133,8 @@
         Nuevo multiplicador de ingresos: <strong id="prestige-new-mult">×1.00</strong>
       </div>
       <div class="prestige-warning">
-        <div class="warn-reset">🔄 Se resetearán: lucas, departamentos, mejoras, recursos, misiones y expansiones.</div>
-        <div class="warn-keep">✅ Se conservarán: logros, tiempo jugado, clics, investigación y acciones acumuladas.</div>
+        <div class="warn-reset"><i data-lucide="rotate-ccw" class="gi"></i> Se resetearán: lucas, departamentos, mejoras, recursos, misiones y expansiones.</div>
+        <div class="warn-keep"><i data-lucide="check-circle" class="gi"></i> Se conservarán: logros, tiempo jugado, clics, investigación y acciones acumuladas.</div>
       </div>
       <div class="modal-actions">
         <button class="btn-secondary" onclick="document.getElementById('prestige-modal').style.display='none'">Cancelar</button>
@@ -143,17 +143,23 @@
     </div>
   </div>
 
+  <!-- Tooltip de recursos (position:fixed, escapa del overflow-x:auto del resource-bar) -->
+  <div id="res-tooltip"></div>
+
   <!-- Navegación inferior (visible solo en móvil) -->
   <nav id="mobile-tabs">
     <button class="tab-btn active" data-tab="panel-left">
-      <span class="tab-icon">🖥️</span>
+      <span class="tab-icon"><i data-lucide="monitor" class="gi"></i></span>
       <span>Oficina</span>
     </button>
     <button class="tab-btn" data-tab="panel-right">
-      <span class="tab-icon">🏗️</span>
+      <span class="tab-icon"><i data-lucide="briefcase" class="gi"></i></span>
       <span>Empresa</span>
     </button>
   </nav>
+
+  <!-- Lucide Icons (SVG vectorizados) -->
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
 
   <!-- Scripts: orden de carga importa -->
   <script src="js/state.js"></script>

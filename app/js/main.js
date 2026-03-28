@@ -1,6 +1,80 @@
 const TICK_MS = 100;
 let autosaveTimer = 0;
 
+// ── Pre-caché de iconos SVG ─────────────────────────────────
+// Renderiza cada icono una sola vez y guarda el SVG resultante.
+// Esto evita el parpadeo en re-renders dinámicos: los templates usan
+// strings SVG directamente en lugar de <i data-lucide> + createIcons().
+const ICON_SVG = {};
+
+function buildIconCache() {
+  const tmp = document.createElement('div');
+  tmp.style.cssText = 'position:absolute;visibility:hidden;pointer-events:none';
+  document.body.appendChild(tmp);
+
+  function render(name, extraClass) {
+    const key = extraClass ? name + '|' + extraClass : name;
+    if (ICON_SVG[key]) return;
+    tmp.innerHTML = `<i data-lucide="${name}" class="gi${extraClass ? ' ' + extraClass : ''}"></i>`;
+    lucide.createIcons({ rootNode: tmp });
+    const svg = tmp.querySelector('svg');
+    ICON_SVG[key] = svg ? svg.outerHTML : '';
+  }
+
+  // --- Iconos de los arrays de datos (extraer nombre del HTML almacenado) ---
+  const allItems = [
+    ...DEPARTMENTS, ...UPGRADES_DATA, ...RESOURCES,
+    ...RESEARCH_TREE, ...ACHIEVEMENTS,
+  ];
+  for (const item of allItems) {
+    if (!item.icon) continue;
+    const m = item.icon.match(/data-lucide="([^"]+)"/);
+    if (!m) continue;
+    render(m[1]);
+    // Sustituir el string HTML por el SVG pre-renderizado
+    item.icon = ICON_SVG[m[1]] || item.icon;
+  }
+
+  // --- Iconos hardcodeados en ui.js ---
+  [['lock-open'], ['lock'], ['clock'], ['x', 'gi-sm'],
+   ['trophy'], ['check', 'gi-sm']].forEach(([n, c]) => render(n, c));
+
+  document.body.removeChild(tmp);
+}
+
+// Devuelve el SVG pre-cacheado para uso en templates
+function gi(name, extraClass) {
+  const key = extraClass ? name + '|' + extraClass : name;
+  return ICON_SVG[key] || '';
+}
+
+// ── Tooltip de recursos ────────────────────────────────────
+function initResTooltip() {
+  const tip = document.getElementById('res-tooltip');
+  const bar = document.getElementById('resource-bar');
+  if (!tip || !bar) return;
+
+  document.addEventListener('mousemove', (e) => {
+    const icon = e.target.closest('[data-tooltip]');
+    if (!icon) { tip.style.display = 'none'; return; }
+
+    tip.innerHTML = icon.dataset.tooltip +
+      '<span class="tt-rate">' + (icon.dataset.rate || '') + '</span>';
+    tip.style.display = 'block';
+
+    const tw = tip.offsetWidth;
+    const th = tip.offsetHeight;
+    let x = e.clientX - tw / 2;
+    let y = e.clientY - th - 14;
+    x = Math.max(8, Math.min(x, window.innerWidth  - tw - 8));
+    if (y < 8) y = e.clientY + 20;
+    tip.style.left = x + 'px';
+    tip.style.top  = y + 'px';
+  });
+
+  document.addEventListener('mouseleave', () => { tip.style.display = 'none'; });
+}
+
 // ── Tab switching para móvil ────────────────────────────────
 function initTabs() {
   const tabBtns = document.querySelectorAll('.tab-btn');
@@ -78,6 +152,9 @@ function init() {
   // Inicializar misiones (rellena slots activos)
   initMissions(state);
 
+  // Pre-renderizar todos los iconos SVG (elimina parpadeo en re-renders)
+  buildIconCache();
+
   // Render inicial
   ui.renderDepartments();
   ui.renderUpgrades();
@@ -86,6 +163,7 @@ function init() {
   ui.renderAchievements();
   ui.renderResearch();
   ui.updateHeader();
+  lucide.createIcons();  // solo para iconos estáticos del HTML
 
   // Banner de progreso offline
   if (offlineData) {
@@ -99,6 +177,8 @@ function init() {
   initTabs();
   // Inicializar tabs internas del panel derecho
   initRightTabs();
+  // Tooltip de recursos
+  initResTooltip();
   // ── Clic en el escritorio ───────────────────────────────
   document.getElementById('desk').addEventListener('click', (e) => {
     const income = calculateClickIncome(state);
@@ -153,6 +233,7 @@ function init() {
     ui.renderResearch();
     checkAchievements(state);
     updateTabBadge();
+    // Sin lucide.createIcons(): todos los iconos dinámicos ya son SVG pre-cacheados
   }, 1000);
 
   // Guardar al cerrar pestaña

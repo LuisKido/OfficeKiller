@@ -3,7 +3,7 @@ const UPGRADES_DATA = [
   {
     id: 'U01',
     name: 'Café de la oficina',
-    icon: '☕',
+    icon: '<i data-lucide="coffee" class="gi"></i>',
     description: '×2 producción de Freelancer.',
     cost: 50,
     condition: (s) => s.departments.freelancer >= 1,
@@ -12,7 +12,7 @@ const UPGRADES_DATA = [
   {
     id: 'U10',
     name: 'Doble monitor',
-    icon: '🖥️',
+    icon: '<i data-lucide="monitor" class="gi"></i>',
     description: '×2 ganancias por clic.',
     cost: 200,
     condition: (s) => s.departments.freelancer >= 5,
@@ -21,7 +21,7 @@ const UPGRADES_DATA = [
   {
     id: 'U08',
     name: 'Standing desk',
-    icon: '🪑',
+    icon: '<i data-lucide="armchair" class="gi"></i>',
     description: '×3 producción de Freelancer.',
     cost: 500,
     condition: (s) => s.departments.freelancer >= 10,
@@ -30,7 +30,7 @@ const UPGRADES_DATA = [
   {
     id: 'U02',
     name: 'CRM básico',
-    icon: '📊',
+    icon: '<i data-lucide="bar-chart-2" class="gi"></i>',
     description: '×2 producción de Ventas.',
     cost: 1000,
     condition: (s) => s.departments.ventas >= 10,
@@ -39,7 +39,7 @@ const UPGRADES_DATA = [
   {
     id: 'U09',
     name: 'Happy Hour de Ventas',
-    icon: '🍻',
+    icon: '<i data-lucide="beer" class="gi"></i>',
     description: '×2 producción de Ventas.',
     cost: 5000,
     condition: (s) => s.departments.ventas >= 25,
@@ -48,7 +48,7 @@ const UPGRADES_DATA = [
   {
     id: 'U03',
     name: 'Onboarding digital',
-    icon: '📋',
+    icon: '<i data-lucide="clipboard-list" class="gi"></i>',
     description: '×2 producción de RRHH.',
     cost: 5000,
     condition: (s) => s.departments.rrhh >= 10,
@@ -57,7 +57,7 @@ const UPGRADES_DATA = [
   {
     id: 'U04',
     name: 'Servidor propio',
-    icon: '🖧',
+    icon: '<i data-lucide="server" class="gi"></i>',
     description: '×3 producción de IT.',
     cost: 50000,
     condition: (s) => s.departments.it >= 25,
@@ -66,7 +66,7 @@ const UPGRADES_DATA = [
   {
     id: 'U11',
     name: 'Analítica de datos',
-    icon: '📈',
+    icon: '<i data-lucide="trending-up" class="gi"></i>',
     description: '×2 producción de Marketing.',
     cost: 80000,
     condition: (s) => s.departments.marketing >= 10,
@@ -75,7 +75,7 @@ const UPGRADES_DATA = [
   {
     id: 'U05',
     name: 'Campaña viral',
-    icon: '📣',
+    icon: '<i data-lucide="megaphone" class="gi"></i>',
     description: '×3 producción de Marketing.',
     cost: 400000,
     condition: (s) => s.departments.marketing >= 50,
@@ -84,7 +84,7 @@ const UPGRADES_DATA = [
   {
     id: 'U12',
     name: 'Fondo de inversión',
-    icon: '💰',
+    icon: '<i data-lucide="piggy-bank" class="gi"></i>',
     description: '×2 producción de Finanzas.',
     cost: 500000,
     condition: (s) => s.departments.finanzas >= 10,
@@ -93,7 +93,7 @@ const UPGRADES_DATA = [
   {
     id: 'U06',
     name: 'Auditoría fiscal',
-    icon: '🔍',
+    icon: '<i data-lucide="search" class="gi"></i>',
     description: '×3 producción de Finanzas.',
     cost: 2000000,
     condition: (s) => s.totalEarned >= 100000000,
@@ -102,7 +102,7 @@ const UPGRADES_DATA = [
   {
     id: 'U07',
     name: 'IPO',
-    icon: '🚀',
+    icon: '<i data-lucide="rocket" class="gi"></i>',
     description: '×10 producción global. ¡La empresa cotiza en bolsa!',
     cost: 50000000,
     condition: (s) => s.departments.multinacional >= 5,

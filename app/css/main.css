@@ -199,10 +199,15 @@ body {
 }
 
 #desk-icon {
-  font-size: 54px;
   display: block;
   line-height: 1;
   transition: transform 0.15s;
+}
+#desk-icon .gi {
+  width: 54px;
+  height: 54px;
+  color: #2563eb;
+  stroke-width: 1.5;
 }
 
 #desk-icon.bounce {
@@ -463,7 +468,7 @@ body {
     border-radius: 16px;
   }
 
-  #desk-icon { font-size: 48px; }
+  #desk-icon .gi { width: 48px; height: 48px; }
 
   /* Noticias: scroll dentro del panel */
   #news-panel {
@@ -510,6 +515,10 @@ body {
     font-size: 22px;
     line-height: 1;
   }
+  .tab-btn .tab-icon .gi {
+    width: 20px;
+    height: 20px;
+  }
 
   .tab-btn.active {
     color: #fde68a;
@@ -532,3 +541,15 @@ body {
 
   .tab-btn { position: relative; }
 }
+
+/* ── Lucide Icons globales ───────────────────────────────────────────── */
+.gi {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  vertical-align: -0.15em;
+  stroke-width: 2;
+  flex-shrink: 0;
+}
+.gi.gi-sm { width: 0.8em;  height: 0.8em;  }
+.gi.gi-lg { width: 1.3em;  height: 1.3em;  }

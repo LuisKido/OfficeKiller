@@ -3,7 +3,7 @@ const DEPARTMENTS = [
   {
     id: 'freelancer',
     name: 'Freelancer',
-    icon: '🧑‍💻',
+    icon: '<i data-lucide="laptop" class="gi"></i>',
     description: 'Tú mismo, solo ante el teclado.',
     basePrice: 10,
     baseProduction: 0.1,
@@ -11,7 +11,7 @@ const DEPARTMENTS = [
   {
     id: 'ventas',
     name: 'Ventas',
-    icon: '🤝',
+    icon: '<i data-lucide="handshake" class="gi"></i>',
     description: 'Cierra tratos con clientes.',
     basePrice: 100,
     baseProduction: 0.5,
@@ -19,7 +19,7 @@ const DEPARTMENTS = [
   {
     id: 'rrhh',
     name: 'RRHH',
-    icon: '👥',
+    icon: '<i data-lucide="users" class="gi"></i>',
     description: 'Contrata gente, mejora productividad.',
     basePrice: 500,
     baseProduction: 2,
@@ -27,7 +27,7 @@ const DEPARTMENTS = [
   {
     id: 'it',
     name: 'IT',
-    icon: '💻',
+    icon: '<i data-lucide="monitor" class="gi"></i>',
     description: 'Automatiza procesos internos.',
     basePrice: 2000,
     baseProduction: 10,
@@ -35,7 +35,7 @@ const DEPARTMENTS = [
   {
     id: 'marketing',
     name: 'Marketing',
-    icon: '📣',
+    icon: '<i data-lucide="megaphone" class="gi"></i>',
     description: 'Atrae más clientes.',
     basePrice: 8000,
     baseProduction: 40,
@@ -43,7 +43,7 @@ const DEPARTMENTS = [
   {
     id: 'finanzas',
     name: 'Finanzas',
-    icon: '💵',
+    icon: '<i data-lucide="banknote" class="gi"></i>',
     description: 'Optimiza los flujos de caja.',
     basePrice: 30000,
     baseProduction: 150,
@@ -51,7 +51,7 @@ const DEPARTMENTS = [
   {
     id: 'legal',
     name: 'Legal',
-    icon: '⚖️',
+    icon: '<i data-lucide="scale" class="gi"></i>',
     description: 'Protege contratos, evita multas.',
     basePrice: 100000,
     baseProduction: 500,
@@ -59,7 +59,7 @@ const DEPARTMENTS = [
   {
     id: 'direccion',
     name: 'Dirección',
-    icon: '🏛️',
+    icon: '<i data-lucide="landmark" class="gi"></i>',
     description: 'Coordina toda la empresa.',
     basePrice: 400000,
     baseProduction: 2000,
@@ -67,7 +67,7 @@ const DEPARTMENTS = [
   {
     id: 'sede',
     name: 'Sede Central',
-    icon: '🏢',
+    icon: '<i data-lucide="building-2" class="gi"></i>',
     description: 'Oficina de lujo, marca empleadora.',
     basePrice: 1500000,
     baseProduction: 7500,
@@ -75,7 +75,7 @@ const DEPARTMENTS = [
   {
     id: 'multinacional',
     name: 'Multinacional',
-    icon: '🌍',
+    icon: '<i data-lucide="globe" class="gi"></i>',
     description: 'Expansión global.',
     basePrice: 10000000,
     baseProduction: 30000,

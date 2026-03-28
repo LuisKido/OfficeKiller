@@ -74,10 +74,10 @@ const ui = {
                       onclick="buyExpansion('${dept.id}')"
                       title="Expande hasta ${nextCap} unidades"
                       ${canBuyExp ? '' : 'disabled'}>
-                🔓 ×${nextMult.toFixed(1)}
+                ${gi('lock-open')} ×${nextMult.toFixed(1)}
                 <span class="btn-expand-detail">${formatLucas(expandCost)} · hasta ${nextCap}</span>
               </button>` : canExpand ? `
-              <span class="dept-expand-hint">🔒 Llena para ×${nextMult.toFixed(1)}</span>` : `
+              <span class="dept-expand-hint">${gi('lock')} Llena para ×${nextMult.toFixed(1)}</span>` : `
               <span class="dept-expand-lv" style="color:#f59e0b">MAX ×${expandMult.toFixed(1)}</span>`}
           </div>
         </div>
@@ -136,9 +136,9 @@ const ui = {
     const notif = document.getElementById('notifications');
     notif.innerHTML = `
       <div id="offline-banner">
-        <span>⏰ Bienvenido de vuelta. En <strong>${timeStr}</strong>
+        <span>${gi('clock')} Bienvenido de vuelta. En <strong>${timeStr}</strong>
               tu empresa generó <strong>${formatLucas(earned)}</strong></span>
-        <button class="close-banner" onclick="this.parentElement.parentElement.innerHTML=''">✕</button>
+        <button class="close-banner" onclick="this.parentElement.parentElement.innerHTML=''">${gi('x','gi-sm')}</button>
       </div>
     `;
   },
@@ -170,9 +170,10 @@ const ui = {
       const current = state.resources[res.id] || 0;
       const cap     = getResourceCap(res.id, state);
       const pct     = Math.min(100, (current / cap) * 100);
+      const rate    = (res.ratePerUnit * (state.departments[res.dept] || 0)).toFixed(2);
       return `
         <div class="res-item">
-          <span class="res-icon">${res.icon}</span>
+          <span class="res-icon" data-tooltip="${res.tooltip}" data-rate="+${rate}/s">${res.icon}</span>
           <div class="res-info">
             <span class="res-name">${res.name}</span>
             <div class="res-bar-track">
@@ -206,8 +207,9 @@ const ui = {
         const res  = RESOURCES.find(r => r.id === req.resource);
         const have = Math.floor(state.resources[req.resource] || 0);
         const met  = have >= req.amount;
+        const tip  = res ? (res.tooltip || res.name) : '';
         return `
-          <span class="req-item ${met ? 'met' : ''}">
+          <span class="req-item ${met ? 'met' : ''}" ${tip ? `data-tooltip="${tip}"` : ''}>
             ${res ? res.icon : ''}
             <strong>${formatNum(req.amount)}</strong>
             <span class="req-have">(${formatNum(have)})</span>
@@ -224,7 +226,7 @@ const ui = {
           <p class="mission-desc">${m.description}</p>
           <div class="mission-reqs">${reqsHtml}</div>
           <div class="mission-footer">
-            <span class="mission-reward">🏆 +${formatLucas(m.reward)}</span>
+            <span class="mission-reward">${gi('trophy')} +${formatLucas(m.reward)}</span>
             <button class="btn-complete"
                     onclick="completeMission('${m.id}')"
                     ${canComplete ? '' : 'disabled'}>
@@ -267,14 +269,15 @@ const ui = {
           const res  = RESOURCES.find(r => r.id === c.resource);
           const have = Math.floor(state.resources[c.resource] || 0);
           const ok   = have >= c.amount;
-          return `<span class="rn-cost-item ${ok ? '' : 'missing'}">${res ? res.icon : ''} ${formatNum(c.amount)}</span>`;
+          const tip  = res ? (res.tooltip || res.name) : '';
+          return `<span class="rn-cost-item ${ok ? '' : 'missing'}" ${tip ? `data-tooltip="${tip}"` : ''}>${res ? res.icon : ''} ${formatNum(c.amount)}</span>`;
         }).join('');
 
         const clickAttr = (!done && unlocked) ? `onclick="buyResearch('${node.id}')"` : '';
 
         html += `
           <div class="${cls}" ${clickAttr}>
-            ${done ? '<span class="rn-done-check">✓</span>' : ''}
+            ${done ? `<span class="rn-done-check">${gi('check','gi-sm')}</span>` : ''}
             <div class="rn-header">
               <span class="rn-icon">${node.icon}</span>
               <div class="rn-name">${node.name}</div>
@@ -301,7 +304,7 @@ const ui = {
       const done = state.achievements.includes(ach.id);
       return `
         <div class="ach-card ${ach.rarity} ${done ? '' : 'locked'}">
-          <span class="ach-icon">${done ? ach.icon : '❓'}</span>
+          <span class="ach-icon">${done ? ach.icon : gi('lock')}</span>
           <div class="ach-info">
             <div class="ach-name">${done ? ach.name : '???'}</div>
             <div class="ach-desc">${done ? ach.description : 'Aún no desbloqueado.'}</div>
@@ -322,7 +325,7 @@ const ui = {
     toast.innerHTML = `
       <span class="toast-icon">${ach.icon}</span>
       <div class="toast-body">
-        <div class="toast-label">🏆 Logro desbloqueado</div>
+        <div class="toast-label">${gi('trophy')} Logro desbloqueado</div>
         <div class="toast-name">${ach.name}</div>
         <div class="toast-desc">${ach.description}</div>
       </div>

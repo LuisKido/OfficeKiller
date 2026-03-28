@@ -18,15 +18,60 @@
 .res-item {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 7px;
   flex-shrink: 0;
   min-width: 108px;
 }
 
+/* ── Icono con hover glow ───────────────────────────────── */
 .res-icon {
-  font-size: 16px;
-  line-height: 1;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  background: rgba(255,255,255,0.08);
   flex-shrink: 0;
+  cursor: default;
+  transition: background 0.15s;
+}
+
+.res-icon .gi {
+  width: 14px;
+  height: 14px;
+  color: #fde68a;
+  stroke-width: 2;
+}
+
+.res-icon:hover {
+  background: rgba(253,230,138,0.18);
+}
+
+/* ── Tooltip global (posicionado por JS con position:fixed) */
+#res-tooltip {
+  position: fixed;
+  background: #1e293b;
+  color: #f1f5f9;
+  font-size: 12px;
+  line-height: 1.55;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.14);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.5);
+  max-width: 230px;
+  pointer-events: none;
+  z-index: 9999;
+  display: none;
+}
+
+#res-tooltip .tt-rate {
+  display: block;
+  color: #86efac;
+  font-weight: 600;
+  margin-top: 4px;
+  font-size: 11px;
 }
 
 .res-info {
@@ -40,7 +85,7 @@
   font-size: 9px;
   text-transform: uppercase;
   letter-spacing: 0.6px;
-  color: rgba(255,255,255,0.55);
+  color: rgba(255,255,255,0.75);
   white-space: nowrap;
 }
 
@@ -62,7 +107,7 @@
 .res-count {
   font-size: 10px;
   font-weight: 600;
-  color: rgba(255,255,255,0.8);
+  color: rgba(255,255,255,0.9);
   white-space: nowrap;
 }
 

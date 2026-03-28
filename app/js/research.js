@@ -17,7 +17,7 @@ const RESEARCH_TREE = [
   {
     id: 'R01', row: 0, col: 0,
     name: 'Scripts básicos',
-    icon: '⚙️',
+    icon: '<i data-lucide="settings" class="gi"></i>',
     description: '+10% producción global.',
     requires: [],
     cost: [{ resource: 'codigo', amount: 80 }],
@@ -26,7 +26,7 @@ const RESEARCH_TREE = [
   {
     id: 'R02', row: 1, col: 0,
     name: 'Automatización IT',
-    icon: '🤖',
+    icon: '<i data-lucide="bot" class="gi"></i>',
     description: '+25% producción de IT.',
     requires: ['R01'],
     cost: [{ resource: 'codigo', amount: 200 }, { resource: 'tickets', amount: 100 }],
@@ -35,7 +35,7 @@ const RESEARCH_TREE = [
   {
     id: 'R03', row: 2, col: 0,
     name: 'CI/CD Corporativo',
-    icon: '🔄',
+    icon: '<i data-lucide="refresh-cw" class="gi"></i>',
     description: '+20% producción global.',
     requires: ['R02'],
     cost: [{ resource: 'codigo', amount: 500 }, { resource: 'tickets', amount: 300 }],
@@ -44,7 +44,7 @@ const RESEARCH_TREE = [
   {
     id: 'R04', row: 3, col: 0,
     name: 'IA Interna',
-    icon: '🧠',
+    icon: '<i data-lucide="brain" class="gi"></i>',
     description: '+50% producción de IT y Freelancer.',
     requires: ['R03'],
     cost: [{ resource: 'codigo', amount: 1200 }, { resource: 'tickets', amount: 800 }],
@@ -57,7 +57,7 @@ const RESEARCH_TREE = [
   {
     id: 'R05', row: 0, col: 1,
     name: 'Embudo de ventas',
-    icon: '🔽',
+    icon: '<i data-lucide="filter" class="gi"></i>',
     description: '+20% producción de Ventas.',
     requires: [],
     cost: [{ resource: 'contratos', amount: 60 }],
@@ -66,7 +66,7 @@ const RESEARCH_TREE = [
   {
     id: 'R06', row: 1, col: 1,
     name: 'Branding corporativo',
-    icon: '🎨',
+    icon: '<i data-lucide="palette" class="gi"></i>',
     description: '+25% producción de Marketing.',
     requires: ['R05'],
     cost: [{ resource: 'contratos', amount: 150 }, { resource: 'campanas', amount: 100 }],
@@ -75,7 +75,7 @@ const RESEARCH_TREE = [
   {
     id: 'R07', row: 2, col: 1,
     name: 'Campaña viral',
-    icon: '📱',
+    icon: '<i data-lucide="smartphone" class="gi"></i>',
     description: '+30% producción global.',
     requires: ['R06'],
     cost: [{ resource: 'campanas', amount: 400 }, { resource: 'contratos', amount: 300 }],
@@ -84,7 +84,7 @@ const RESEARCH_TREE = [
   {
     id: 'R08', row: 3, col: 1,
     name: 'Expansión de mercado',
-    icon: '🌎',
+    icon: '<i data-lucide="globe" class="gi"></i>',
     description: '+50% producción de Ventas y Marketing.',
     requires: ['R07'],
     cost: [{ resource: 'campanas', amount: 900 }, { resource: 'acuerdos', amount: 200 }],
@@ -97,7 +97,7 @@ const RESEARCH_TREE = [
   {
     id: 'R09', row: 0, col: 2,
     name: 'Contabilidad ágil',
-    icon: '📒',
+    icon: '<i data-lucide="book-open" class="gi"></i>',
     description: '+20% producción de Finanzas.',
     requires: [],
     cost: [{ resource: 'reportes', amount: 50 }],
@@ -106,7 +106,7 @@ const RESEARCH_TREE = [
   {
     id: 'R10', row: 1, col: 2,
     name: 'Planificación estratégica',
-    icon: '♟️',
+    icon: '<i data-lucide="target" class="gi"></i>',
     description: '+25% producción de Dirección.',
     requires: ['R09'],
     cost: [{ resource: 'reportes', amount: 150 }, { resource: 'estrategias', amount: 80 }],
@@ -115,7 +115,7 @@ const RESEARCH_TREE = [
   {
     id: 'R11', row: 2, col: 2,
     name: 'Auditoría de procesos',
-    icon: '🔍',
+    icon: '<i data-lucide="search" class="gi"></i>',
     description: '×2 velocidad de generación de recursos.',
     requires: ['R10'],
     cost: [{ resource: 'reportes', amount: 400 }, { resource: 'documentos', amount: 250 }],
@@ -124,7 +124,7 @@ const RESEARCH_TREE = [
   {
     id: 'R12', row: 3, col: 2,
     name: 'Holding corporativo',
-    icon: '🏦',
+    icon: '<i data-lucide="landmark" class="gi"></i>',
     description: '+40% producción global.',
     requires: ['R11'],
     cost: [{ resource: 'estrategias', amount: 600 }, { resource: 'proyectos', amount: 300 }],
@@ -137,7 +137,7 @@ const RESEARCH_TREE = [
   {
     id: 'R13', row: 0, col: 3,
     name: 'Onboarding exprés',
-    icon: '🚀',
+    icon: '<i data-lucide="rocket" class="gi"></i>',
     description: '+20% producción de RRHH.',
     requires: [],
     cost: [{ resource: 'cvs', amount: 60 }],
@@ -146,7 +146,7 @@ const RESEARCH_TREE = [
   {
     id: 'R14', row: 1, col: 3,
     name: 'Marco legal sólido',
-    icon: '⚖️',
+    icon: '<i data-lucide="scale" class="gi"></i>',
     description: '+25% producción de Legal.',
     requires: ['R13'],
     cost: [{ resource: 'cvs', amount: 150 }, { resource: 'documentos', amount: 100 }],
@@ -155,7 +155,7 @@ const RESEARCH_TREE = [
   {
     id: 'R15', row: 2, col: 3,
     name: 'Cultura corporativa',
-    icon: '🎯',
+    icon: '<i data-lucide="crosshair" class="gi"></i>',
     description: '+2× ingresos por clic.',
     requires: ['R14'],
     cost: [{ resource: 'cvs', amount: 350 }, { resource: 'documentos', amount: 250 }],
@@ -164,7 +164,7 @@ const RESEARCH_TREE = [
   {
     id: 'R16', row: 3, col: 3,
     name: 'Sede insignia',
-    icon: '🏢',
+    icon: '<i data-lucide="building-2" class="gi"></i>',
     description: '+50% producción de Sede Central.',
     requires: ['R15'],
     cost: [{ resource: 'proyectos', amount: 400 }, { resource: 'acuerdos', amount: 300 }],
@@ -177,7 +177,7 @@ const RESEARCH_TREE = [
   {
     id: 'R17', row: 4, col: 1,
     name: 'Sinergia Tech-Ventas',
-    icon: '🤝',
+    icon: '<i data-lucide="handshake" class="gi"></i>',
     description: '+50% producción global.',
     requires: ['R04', 'R08'],
     cost: [{ resource: 'codigo', amount: 800 }, { resource: 'campanas', amount: 600 }, { resource: 'acuerdos', amount: 400 }],
@@ -186,7 +186,7 @@ const RESEARCH_TREE = [
   {
     id: 'R18', row: 4, col: 2,
     name: 'Empresa 360°',
-    icon: '🌐',
+    icon: '<i data-lucide="network" class="gi"></i>',
     description: '+60% producción global.',
     requires: ['R12', 'R16'],
     cost: [{ resource: 'estrategias', amount: 900 }, { resource: 'proyectos', amount: 700 }, { resource: 'acuerdos', amount: 500 }],
