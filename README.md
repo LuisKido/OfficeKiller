@@ -73,3 +73,9 @@ Perfecto para los ratos muertos: después del almuerzo, mientras espera que carg
 - [Diseño del Juego (GDD)](docs/GDD.md)
 - [Arquitectura Técnica](docs/ARCHITECTURE.md)
 - [Changelog](docs/CHANGELOG.md)
+
+---
+
+## Licencia
+
+[MIT](LICENSE) © 2026 LUIS KIDO OROSTIZAGA
