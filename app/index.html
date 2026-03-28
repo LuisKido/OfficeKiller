@@ -132,7 +132,10 @@
       <div class="prestige-after">
         Nuevo multiplicador de ingresos: <strong id="prestige-new-mult">×1.00</strong>
       </div>
-      <p class="prestige-warning">⚠️ Se resetearán: lucas, departamentos, mejoras, recursos, misiones y expansiones.<br>Se conservarán: logros, tiempo jugado, clics y acciones acumuladas.</p>
+      <div class="prestige-warning">
+        <div class="warn-reset">🔄 Se resetearán: lucas, departamentos, mejoras, recursos, misiones y expansiones.</div>
+        <div class="warn-keep">✅ Se conservarán: logros, tiempo jugado, clics, investigación y acciones acumuladas.</div>
+      </div>
       <div class="modal-actions">
         <button class="btn-secondary" onclick="document.getElementById('prestige-modal').style.display='none'">Cancelar</button>
         <button class="btn-prestige-confirm" onclick="performPrestige()">¡Confirmar Prestige!</button>
