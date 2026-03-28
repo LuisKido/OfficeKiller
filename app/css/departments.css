@@ -1,0 +1,145 @@
+#departments-section {
+  background: var(--bg-panel);
+  border-radius: var(--radius);
+  padding: 16px;
+  box-shadow: var(--shadow);
+}
+
+#departments-list {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+/* ---- Card ---- */
+.dept-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.dept-card.can-afford {
+  border-color: #93c5fd;
+  box-shadow: 0 0 0 1px rgba(37,99,235,0.08);
+}
+
+/* ---- Icon ---- */
+.dept-icon {
+  font-size: 28px;
+  flex-shrink: 0;
+  width: 38px;
+  text-align: center;
+  line-height: 1;
+}
+
+/* ---- Info ---- */
+.dept-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.dept-name {
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 1.2;
+}
+
+.dept-desc {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 1px;
+}
+
+.dept-prod {
+  font-size: 11px;
+  color: var(--green);
+  font-weight: 600;
+  margin-top: 3px;
+}
+
+/* ---- Right side: quantity + buy ---- */
+.dept-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.dept-qty {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--text-muted);
+  line-height: 1;
+  min-width: 28px;
+  text-align: right;
+}
+
+.dept-card.can-afford .dept-qty {
+  color: var(--accent);
+}
+
+.btn-buy {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+  transition: background 0.15s, transform 0.1s;
+  min-width: 84px;
+  text-align: center;
+}
+
+.btn-buy:hover:not(:disabled) {
+  background: var(--accent-hover);
+  transform: translateY(-1px);
+}
+
+.btn-buy:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.btn-buy:disabled {
+  background: #e2e8f0;
+  color: #94a3b8;
+  cursor: not-allowed;
+}
+
+.btn-buy-delta {
+  display: block;
+  font-size: 10px;
+  font-weight: 400;
+  opacity: .8;
+  margin-top: 1px;
+  color: #d1fae5;
+}
+
+/* ============================================================
+   RESPONSIVE — MOBILE
+   ============================================================ */
+@media (max-width: 640px) {
+  #departments-section { padding: 12px; }
+
+  .dept-card  { padding: 9px 10px; gap: 10px; }
+  .dept-icon  { font-size: 24px; width: 32px; }
+  .dept-name  { font-size: 13px; }
+  .dept-desc  { display: none; } /* Ocultar descripción para ahorrar espacio */
+  .dept-qty   { font-size: 18px; }
+
+  .btn-buy {
+    font-size: 11px;
+    padding: 6px 8px;
+    min-width: 72px;
+    /* Táctil: área de toque más grande */
+    min-height: 36px;
+  }
+}
