@@ -1,0 +1,779 @@
+/* ============================================================
+   LOBBY LAYOUT — idle game style (overlay bottom sheet)
+   ============================================================ */
+
+/* ── Game container: full screen ── */
+#game {
+  position: relative;
+  flex: 1;
+  overflow: hidden;
+  display: block !important;
+}
+
+/* ── Panel izquierdo = lobby siempre visible ── */
+#panel-left {
+  position: absolute !important;
+  inset: 0;
+  width: 100% !important;
+  display: flex !important;
+  flex-direction: column;
+  border-right: none !important;
+  background: transparent !important;
+  overflow: hidden;
+  z-index: 1;
+}
+
+/* Canvas PixiJS ocupa todo el fondo */
+#pixi-canvas {
+  position: absolute !important;
+  inset: 0;
+  width: 100% !important;
+  height: 100% !important;
+  z-index: 0;
+  display: block;
+}
+
+/* ── Área del clicker / avatar ── */
+#clicker-area {
+  flex: 1;
+  display: flex;
+  align-items: center;        /* centrado vertical */
+  justify-content: center;
+  border-bottom: none !important;
+  padding: 0 0 80px 0 !important; /* espacio para el news ticker al fondo */
+  position: relative;
+  z-index: 2;
+}
+
+/* El desk se convierte en el contenedor transparente del avatar */
+#desk {
+  width: 180px !important;
+  height: 240px !important;
+  background: transparent !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  display: flex !important;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  cursor: pointer;
+  user-select: none;
+  position: relative;
+  transition: transform 0.1s;
+}
+
+#desk:hover  { transform: scale(1.04) translateY(-4px) !important; box-shadow: none !important; }
+#desk:active { transform: scale(0.96) translateY(0px) !important;  box-shadow: none !important; }
+
+/* Ocultar el ícono original del desk (usamos SVG propio) */
+#desk-icon { display: none !important; }
+
+/* Texto de ingresos por clic — se mueve debajo del avatar */
+#click-hint  { display: none !important; }
+#click-income {
+  font-size: 15px !important;
+  font-weight: 800 !important;
+  color: #fde68a !important;
+  text-shadow: 0 1px 6px rgba(0,0,0,0.45), 0 0 20px rgba(253,230,138,0.4);
+  margin-top: 6px;
+  position: relative;
+  z-index: 2;
+}
+
+/* ── Avatar SVG animado ── */
+#avatar-character {
+  position: relative;
+  width: 160px;
+  height: 240px;
+  z-index: 2;
+  animation: avatarFloat 3s ease-in-out infinite;
+  transform-origin: bottom center;
+  filter: drop-shadow(0 10px 20px rgba(0,0,0,0.35));
+}
+
+#avatar-character .character-svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* Estados del avatar */
+#avatar-character[data-state="click"] {
+  animation: avatarClick 0.4s ease forwards, avatarFloat 3s ease-in-out 0.4s infinite;
+}
+#avatar-character[data-state="earn"] {
+  animation: avatarJump 0.6s ease forwards, avatarFloat 3s ease-in-out 0.6s infinite;
+}
+#avatar-character[data-state="prestige"] {
+  animation: avatarPrestige 1.2s ease forwards, avatarFloat 3s ease-in-out 1.2s infinite;
+}
+
+@keyframes avatarFloat {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50%       { transform: translateY(-8px) rotate(0.5deg); }
+}
+
+@keyframes avatarClick {
+  0%   { transform: scale(1) translateY(0); }
+  25%  { transform: scale(1.18) translateY(-6px) rotate(-3deg); }
+  60%  { transform: scale(0.94) translateY(2px) rotate(1deg); }
+  100% { transform: scale(1) translateY(0); }
+}
+
+@keyframes avatarJump {
+  0%   { transform: scale(1) translateY(0); }
+  30%  { transform: scale(1.05, 0.95) translateY(4px); }
+  60%  { transform: scale(0.95, 1.05) translateY(-30px); }
+  80%  { transform: scale(1.05, 0.95) translateY(4px); }
+  100% { transform: scale(1) translateY(0); }
+}
+
+@keyframes avatarPrestige {
+  0%   { transform: scale(1) rotate(0deg); filter: brightness(1); }
+  20%  { transform: scale(1.2) rotate(-15deg); filter: brightness(1.4) hue-rotate(30deg); }
+  40%  { transform: scale(1.15) rotate(15deg); filter: brightness(1.5) hue-rotate(90deg); }
+  60%  { transform: scale(1.2) rotate(-10deg); filter: brightness(1.4) hue-rotate(180deg); }
+  80%  { transform: scale(1.1) rotate(5deg); filter: brightness(1.3) hue-rotate(270deg); }
+  100% { transform: scale(1) rotate(0deg); filter: brightness(1); }
+}
+
+/* ── Ticker de noticias al fondo del lobby ── */
+#news-panel {
+  position: absolute !important;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 3;
+  background: linear-gradient(transparent, rgba(0,0,0,0.6)) !important;
+  padding: 24px 14px 8px !important;
+  max-height: 72px;
+  overflow: hidden;
+  flex: initial !important;
+}
+
+#news-panel h3 {
+  color: rgba(255,255,255,0.55) !important;
+  margin-bottom: 4px !important;
+}
+
+.news-item {
+  color: rgba(255,255,255,0.8) !important;
+  border-left-color: rgba(253,230,138,0.6) !important;
+  font-size: 11px !important;
+}
+
+/* ============================================================
+   BOTTOM SHEET (panel derecho)
+   ============================================================ */
+#panel-right {
+  position: absolute !important;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 20;
+  height: 58vh;
+  max-height: 58vh;
+  display: flex !important;
+  flex-direction: column;
+  background: #ffffff;
+  border-radius: 20px 20px 0 0;
+  box-shadow: 0 -4px 30px rgba(0,0,0,0.22);
+  transform: translateY(100%);
+  transition: transform 0.35s cubic-bezier(0.32, 0.72, 0, 1);
+  overflow: hidden;
+  border-right: none !important;
+  width: 100% !important;
+  flex: none !important;
+}
+
+#panel-right.tab-active {
+  transform: translateY(0);
+}
+
+/* Handle de arrastre */
+#sheet-handle {
+  display: flex;
+  justify-content: center;
+  padding: 10px 0 4px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.handle-bar {
+  width: 40px;
+  height: 4px;
+  background: #cbd5e1;
+  border-radius: 2px;
+}
+
+/* Tabs internas del panel */
+#right-tabs {
+  background: #ffffff !important;
+  padding: 4px 12px 0 !important;
+  border-bottom: 2px solid #e1e8f0 !important;
+}
+
+/* Scrollable content dentro del sheet */
+.rtab-pane {
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* ============================================================
+   BOTTOM NAV — siempre visible (desktop + mobile)
+   ============================================================ */
+#mobile-tabs {
+  display: flex !important;
+  flex-shrink: 0;
+  background: #1e3a5f;
+  border-top: 1px solid rgba(255,255,255,0.12);
+  padding-bottom: env(safe-area-inset-bottom, 0);
+  z-index: 30;
+  position: relative;
+}
+
+.tab-btn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 9px 0 7px;
+  background: none;
+  border: none;
+  color: rgba(255,255,255,0.5);
+  cursor: pointer;
+  font-size: 10px;
+  letter-spacing: 0.3px;
+  gap: 3px;
+  transition: color 0.15s, background 0.15s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.tab-btn .tab-icon .gi {
+  width: 20px;
+  height: 20px;
+}
+
+.tab-btn.active {
+  color: #fde68a;
+  background: rgba(255,255,255,0.07);
+}
+
+.tab-btn { position: relative; }
+
+.tab-btn .tab-badge {
+  position: absolute;
+  top: 6px;
+  right: calc(50% - 18px);
+  background: #f59e0b;
+  color: #fff;
+  font-size: 9px;
+  font-weight: 800;
+  border-radius: 10px;
+  padding: 1px 5px;
+  line-height: 1.4;
+}
+
+/* ============================================================
+   HUD HEADER — barra compacta tipo idle game
+   ============================================================ */
+#header {
+  z-index: 25;
+  height: 48px !important;
+  padding: 0 10px !important;
+  background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 100%) !important;
+  box-shadow: 0 2px 20px rgba(0,0,0,0.4) !important;
+  gap: 6px !important;
+}
+
+/* Ícono de la app — solo el building */
+#header h1 {
+  font-size: 0 !important;
+  line-height: 1;
+  flex-shrink: 0;
+}
+#header h1 .gi {
+  width: 22px !important;
+  height: 22px !important;
+  color: #fde68a;
+}
+
+/* Contenedor de stats tipo pills */
+.header-stats {
+  display: flex !important;
+  gap: 6px !important;
+  flex: 1;
+  align-items: center;
+}
+
+/* Pill individual: icono + valor */
+.hud-pill {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 20px;
+  padding: 3px 9px 3px 6px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #fde68a;
+  white-space: nowrap;
+}
+
+.hud-pill .hud-icon {
+  width: 13px !important;
+  height: 13px !important;
+  opacity: 0.75;
+  flex-shrink: 0;
+}
+
+.hud-pill.hud-green        { color: #4ade80; }
+.hud-pill.hud-prestige     { color: #f59e0b; }
+
+/* Botones de acción — solo icono, sin texto */
+.header-actions {
+  display: flex !important;
+  gap: 4px !important;
+  flex-shrink: 0;
+}
+
+.btn-icon {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.18);
+  border-radius: 8px;
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.15s;
+  padding: 0;
+}
+.btn-icon:hover           { background: rgba(255,255,255,0.2); }
+.btn-icon .gi             { width: 15px !important; height: 15px !important; }
+.btn-icon.btn-danger-icon { background: rgba(220,38,38,0.2); border-color: rgba(220,38,38,0.35); color: #fca5a5; }
+.btn-icon.btn-danger-icon:hover { background: rgba(220,38,38,0.4); }
+.btn-icon.btn-prestige-hud { background: rgba(245,158,11,0.2); border-color: rgba(245,158,11,0.4); color: #fde68a; }
+
+/* Resource bar flotante sobre el lobby */
+#resource-bar {
+  position: fixed;
+  top: 48px;
+  left: 0;
+  right: 0;
+  z-index: 22;
+}
+
+#notifications {
+  position: fixed;
+  top: 48px;
+  left: 0;
+  right: 0;
+  z-index: 23;
+}
+
+/* ============================================================
+   DESKTOP — misma experiencia idle que móvil (columna centrada)
+   ============================================================ */
+@media (min-width: 641px) {
+  body {
+    background: #0a1628 !important;
+    align-items: center;
+  }
+
+  #header {
+    width: 100%;
+    max-width: 480px;
+  }
+
+  #game {
+    width: 480px;
+    max-width: 480px;
+    flex: 1;
+  }
+
+  #mobile-tabs {
+    width: 480px;
+    max-width: 480px;
+  }
+
+  #resource-bar, #notifications {
+    max-width: 480px;
+    left: 50%;
+    transform: translateX(-50%);
+    right: auto;
+  }
+
+  /* El bottom sheet no excede el ancho del juego */
+  #panel-right {
+    width: 480px !important;
+    left: 50%;
+    transform: translateX(-50%) translateY(100%);
+    right: auto;
+  }
+
+  #panel-right.tab-active {
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+/* ============================================================
+   COIN PARTICLES (CSS fallback si PixiJS no carga)
+   ============================================================ */
+.coin-particle {
+  position: fixed;
+  pointer-events: none;
+  font-size: 18px;
+  z-index: 999;
+  animation: coinFloat 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  will-change: transform, opacity;
+}
+
+@keyframes coinFloat {
+  0%   { transform: translate(-50%, -50%) scale(0.5); opacity: 1; }
+  60%  { opacity: 1; }
+  100% { transform: translate(calc(-50% + var(--dx, 0px)), calc(-50% - 80px)) scale(1.1); opacity: 0; }
+}
+
+/* ============================================================
+   EDIFICIOS CSS (fondo del lobby — sin PixiJS)
+   ============================================================ */
+#css-cityscape {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-around;
+  padding: 0 4px;
+}
+
+.css-building {
+  border-radius: 6px 6px 0 0;
+  transition: height 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+  position: relative;
+  flex-shrink: 0;
+  min-height: 4px;
+}
+
+.css-building-windows {
+  position: absolute;
+  top: 8px;
+  left: 4px;
+  right: 4px;
+  bottom: 0;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 3px;
+  padding: 0 2px;
+}
+
+.css-window {
+  background: rgba(255,255,255,0.25);
+  border-radius: 2px;
+  transition: background 0.3s;
+}
+
+.css-window.lit {
+  background: rgba(255,235,100,0.7);
+  box-shadow: 0 0 4px rgba(255,235,100,0.5);
+}
+
+/* Sky gradient background */
+#lobby-sky {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: linear-gradient(180deg,
+    #1e3a5f 0%,
+    #2d5a8e 30%,
+    #4a86c8 60%,
+    #7db8f0 80%,
+    #b8d8f5 95%,
+    #d4e9f7 100%
+  );
+}
+
+/* Ground strip */
+#lobby-ground {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 28px;
+  z-index: 2;
+  background: linear-gradient(180deg, #374151 0%, #1f2937 100%);
+  border-top: 2px solid #4b5563;
+}
+
+/* Sidewalk line on ground */
+#lobby-ground::after {
+  content: '';
+  position: absolute;
+  top: 8px;
+  left: 10%;
+  right: 10%;
+  height: 2px;
+  background: #6b7280;
+  border-radius: 1px;
+}
+
+/* Stars in sky */
+.sky-star {
+  position: absolute;
+  background: white;
+  border-radius: 50%;
+  animation: twinkle 2s ease-in-out infinite;
+}
+
+/* ============================================================
+   SISTEMA DE NOTIFICACIONES
+   ============================================================ */
+
+/* Campana con badge */
+.btn-notif-bell {
+  position: relative;
+}
+
+.notif-badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  min-width: 16px;
+  height: 16px;
+  background: #ef4444;
+  color: #fff;
+  font-size: 9px;
+  font-weight: 800;
+  border-radius: 999px;
+  padding: 0 3px;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  border: 1.5px solid #0f172a;
+  pointer-events: none;
+}
+
+@keyframes badgePulse {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.5); }
+  100% { transform: scale(1); }
+}
+.badge-pulse { animation: badgePulse 0.35s ease; }
+
+/* ── Toast debajo del avatar ── */
+#notif-toast {
+  position: absolute;
+  bottom: 48px;
+  left: 50%;
+  transform: translateX(-50%) translateY(6px);
+  z-index: 15;
+  background: rgba(10, 22, 40, 0.9);
+  color: #f0f4f8;
+  font-size: 12px;
+  font-weight: 500;
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 20px;
+  padding: 7px 16px;
+  max-width: 86%;
+  text-align: center;
+  line-height: 1.4;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+#notif-toast.toast-show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+#notif-toast.toast-hide {
+  opacity: 0;
+  transform: translateX(-50%) translateY(6px);
+}
+
+/* ── Modal de notificaciones — ocupa todo el área del juego ── */
+#notif-panel {
+  position: absolute;
+  inset: 0;
+  z-index: 28;           /* encima del lobby y bottom sheet, debajo del prestige modal */
+  background: #0f172a;
+  display: flex;
+  flex-direction: column;
+  /* oculto por defecto */
+  opacity: 0;
+  transform: scale(0.97);
+  pointer-events: none;
+  transition: opacity 0.22s ease, transform 0.22s ease;
+}
+
+#notif-panel.notif-panel-open {
+  opacity: 1;
+  transform: scale(1);
+  pointer-events: auto;
+}
+
+.notif-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 18px 14px;
+  background: #1e293b;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  flex-shrink: 0;
+}
+
+.notif-panel-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #f0f4f8;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.notif-panel-title .gi {
+  width: 16px !important;
+  height: 16px !important;
+  color: #fde68a;
+}
+
+.notif-close-btn {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 8px;
+  color: rgba(255,255,255,0.7);
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+.notif-close-btn:hover { background: rgba(255,255,255,0.15); color: #fff; }
+.notif-close-btn .gi  { width: 15px !important; height: 15px !important; }
+
+#notif-list {
+  overflow-y: auto;
+  flex: 1;
+  padding: 6px 0 16px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,255,255,0.08) transparent;
+}
+
+/* Etiqueta de sección (Nuevas / Anteriores) */
+.notif-section-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px 6px;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: #60a5fa;
+}
+.notif-section-read { color: rgba(255,255,255,0.3); }
+
+.notif-count-badge {
+  background: #3b82f6;
+  color: #fff;
+  font-size: 9px;
+  font-weight: 800;
+  border-radius: 999px;
+  padding: 1px 6px;
+  line-height: 1.6;
+}
+
+/* Item individual */
+.notif-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 11px 18px;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  position: relative;
+  transition: background 0.12s;
+}
+.notif-item:last-child { border-bottom: none; }
+.notif-unread { background: rgba(59,130,246,0.06); }
+
+/* Ícono del mensaje */
+.notif-icon-wrap {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.07);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+.notif-unread .notif-icon-wrap {
+  background: rgba(59,130,246,0.15);
+}
+
+/* Cuerpo del mensaje */
+.notif-body { flex: 1; min-width: 0; padding-top: 1px; }
+
+.notif-text {
+  font-size: 13px;
+  color: rgba(226,232,240,0.75);
+  line-height: 1.45;
+  margin: 0 0 4px;
+}
+.notif-unread .notif-text { color: #f0f4f8; font-weight: 500; }
+
+.notif-time {
+  font-size: 10px;
+  color: rgba(255,255,255,0.25);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Punto azul de no leído (esquina derecha) */
+.notif-new-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #3b82f6;
+  box-shadow: 0 0 6px rgba(59,130,246,0.8);
+  flex-shrink: 0;
+  margin-top: 6px;
+}
+
+/* Estado vacío */
+.notif-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 60px 18px 40px;
+  text-align: center;
+}
+.notif-empty-icon { font-size: 40px; }
+.notif-empty-state p    { font-size: 14px; color: rgba(255,255,255,0.5); margin: 0; font-weight: 600; }
+.notif-empty-state small { font-size: 12px; color: rgba(255,255,255,0.25); }
+
+@keyframes twinkle {
+  0%, 100% { opacity: 0.3; transform: scale(1); }
+  50%       { opacity: 1;   transform: scale(1.3); }
+}

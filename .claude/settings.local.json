@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(wc -l \"c:\\\\Users\\\\layon\\\\Desktop\\\\OfficeKiller\\\\app\\\\js\"/*.js)",
+      "Bash(npx --version)",
+      "WebSearch",
+      "WebFetch(domain:rive.app)",
+      "WebFetch(domain:help.rive.app)",
+      "WebFetch(domain:lottiefiles.com)",
+      "WebFetch(domain:iconscout.com)",
+      "WebFetch(domain:assets5.lottiefiles.com)",
+      "WebFetch(domain:assets3.lottiefiles.com)",
+      "WebFetch(domain:assets2.lottiefiles.com)"
+    ]
+  }
+}

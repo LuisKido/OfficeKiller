@@ -3,8 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Office Killer 🏢</title>
+  <title>Office Killer</title>
   <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/lobby.css">
   <link rel="stylesheet" href="css/departments.css">
   <link rel="stylesheet" href="css/upgrades.css">
   <link rel="stylesheet" href="css/missions.css">
@@ -15,29 +16,32 @@
 <body>
 
   <header id="header">
-    <h1><i data-lucide="building-2" class="gi gi-lg"></i> Office Killer</h1>
+    <h1><i data-lucide="building-2" class="gi"></i></h1>
     <div class="header-stats">
-      <div class="stat">
-        <span class="stat-label">Balance</span>
-        <span class="stat-value" id="balance-display">0 lucas</span>
+      <div class="hud-pill">
+        <i data-lucide="wallet" class="gi hud-icon"></i>
+        <span id="balance-display">0</span>
       </div>
-      <div class="stat">
-        <span class="stat-label">Ganando</span>
-        <span class="stat-value green" id="income-display">0 lucas/s</span>
+      <div class="hud-pill hud-green">
+        <i data-lucide="trending-up" class="gi hud-icon"></i>
+        <span id="income-display">0/s</span>
       </div>
-      <div class="stat">
-        <span class="stat-label">Total ganado</span>
-        <span class="stat-value dim" id="total-display">0 lucas</span>
-      </div>
-      <div class="stat" id="prestige-stat">
-        <span class="stat-label">Acciones</span>
-        <span class="stat-value prestige-mult" id="prestige-mult-display">×1.00</span>
+      <!-- total-display oculto pero requerido por ui.js -->
+      <span id="total-display" style="display:none">0</span>
+      <div class="hud-pill hud-prestige" id="prestige-stat" style="display:none">
+        <i data-lucide="star" class="gi hud-icon"></i>
+        <span id="prestige-mult-display">×1.00</span>
       </div>
     </div>
     <div class="header-actions">
-      <button id="btn-save" class="btn-secondary"><i data-lucide="save" class="gi"></i> <span class="btn-label">Guardar</span></button>
-      <button id="btn-prestige" style="display:none"><i data-lucide="star" class="gi"></i> <span class="btn-label">Prestige</span></button>
-      <button id="btn-reset" class="btn-danger"><i data-lucide="trash-2" class="gi"></i> <span class="btn-label">Reiniciar</span></button>
+      <!-- Campana de notificaciones -->
+      <button id="btn-notif" class="btn-icon btn-notif-bell" title="Notificaciones">
+        <i data-lucide="bell" class="gi"></i>
+        <span id="notif-badge" class="notif-badge" style="display:none">0</span>
+      </button>
+      <button id="btn-save"     class="btn-icon" title="Guardar"><i data-lucide="save"    class="gi"></i></button>
+      <button id="btn-prestige" class="btn-icon btn-prestige-hud" style="display:none" title="Prestige"><i data-lucide="star" class="gi"></i></button>
+      <button id="btn-reset"    class="btn-icon btn-danger-icon"  title="Reiniciar"><i data-lucide="trash-2" class="gi"></i></button>
     </div>
   </header>
 
@@ -46,25 +50,228 @@
 
   <div id="game">
 
-    <!-- PANEL IZQUIERDO: clicker + noticias -->
+    <!-- LOBBY PRINCIPAL — siempre visible como fondo -->
     <aside id="panel-left" class="tab-active">
+
+      <!-- Cielo y fondo -->
+      <div id="lobby-sky">
+        <div class="sky-star" style="width:2px;height:2px;top:8%;left:15%;animation-delay:0s"></div>
+        <div class="sky-star" style="width:3px;height:3px;top:12%;left:40%;animation-delay:0.5s"></div>
+        <div class="sky-star" style="width:2px;height:2px;top:6%;left:65%;animation-delay:1s"></div>
+        <div class="sky-star" style="width:2px;height:2px;top:18%;left:80%;animation-delay:1.5s"></div>
+        <div class="sky-star" style="width:3px;height:3px;top:10%;left:55%;animation-delay:0.8s"></div>
+        <div class="sky-star" style="width:2px;height:2px;top:22%;left:25%;animation-delay:0.3s"></div>
+      </div>
+
+      <!-- Canvas PixiJS (partículas y efectos) -->
+      <canvas id="pixi-canvas"></canvas>
+
+      <!-- Edificios CSS por departamento -->
+      <div id="css-cityscape"></div>
+
+      <!-- Piso / suelo -->
+      <div id="lobby-ground"></div>
+
+      <!-- Zona de clic / avatar del personaje -->
       <div id="clicker-area">
         <div id="desk">
+
+          <!-- Personaje cartoon SVG — rediseño v2 -->
+          <div id="avatar-character" data-state="idle">
+            <svg class="character-svg" viewBox="0 0 120 240" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <radialGradient id="faceGrad" cx="42%" cy="38%" r="60%">
+                  <stop offset="0%"   stop-color="#fef3c7"/>
+                  <stop offset="100%" stop-color="#fbbf24"/>
+                </radialGradient>
+                <linearGradient id="jacketGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%"   stop-color="#152a47"/>
+                  <stop offset="50%"  stop-color="#1e3a5f"/>
+                  <stop offset="100%" stop-color="#152a47"/>
+                </linearGradient>
+              </defs>
+
+              <!-- ── Sombra ── -->
+              <ellipse cx="61" cy="236" rx="22" ry="5" fill="rgba(0,0,0,0.22)"/>
+
+              <!-- ── Zapatos ── -->
+              <!-- Zapato izquierdo -->
+              <path d="M32 220 Q28 219 26 224 Q25 229 36 230 L52 230 Q57 230 57 225 L57 220 Z" fill="#111827"/>
+              <path d="M33 220 L57 220 L57 223 Q50 222 44 221 Q38 220 33 220 Z" fill="#374151"/>
+              <!-- Zapato derecho -->
+              <path d="M63 220 L63 225 Q63 230 68 230 L84 230 Q95 229 94 224 Q92 219 88 220 Z" fill="#111827"/>
+              <path d="M63 220 L88 220 Q82 220 76 221 Q70 222 63 223 Z" fill="#374151"/>
+
+              <!-- ── Piernas ── -->
+              <path d="M36 162 Q33 163 32 172 L32 220 L56 220 L56 172 Q55 163 52 162 Z" fill="#1c3354"/>
+              <path d="M68 162 Q65 163 64 172 L64 220 L88 220 L88 172 Q87 163 84 162 Z" fill="#1c3354"/>
+              <!-- Línea de pliegue central -->
+              <line x1="60" y1="162" x2="60" y2="214" stroke="#152a47" stroke-width="1.5" opacity="0.7"/>
+              <!-- Dobladillo pantalón -->
+              <rect x="32"  y="217" width="24" height="3" rx="1.5" fill="#152a47"/>
+              <rect x="64" y="217" width="24" height="3" rx="1.5" fill="#152a47"/>
+
+              <!-- ── Cuerpo / Saco ── -->
+              <rect x="22" y="98" width="76" height="68" rx="13" fill="url(#jacketGrad)"/>
+
+              <!-- Camisa (plastón blanco) -->
+              <path d="M51 98 L69 98 L69 166 L51 166 Z" fill="#f8fafc"/>
+              <!-- Cuello de camisa (V) -->
+              <path d="M51 98 L60 107 L69 98 L69 102 L60 112 L51 102 Z" fill="#e8edf2"/>
+
+              <!-- Solapa izquierda -->
+              <path d="M51 98 L22 116 L22 134 L51 120 Z" fill="#152a47"/>
+              <path d="M51 98 L44 111 L51 120 Z" fill="#1a3356"/>
+              <!-- Solapa derecha -->
+              <path d="M69 98 L98 116 L98 134 L69 120 Z" fill="#152a47"/>
+              <path d="M69 98 L76 111 L69 120 Z" fill="#1a3356"/>
+
+              <!-- Corbata -->
+              <path d="M57 107 L63 107 L61.5 133 L60 138 L58.5 133 Z" fill="#dc2626"/>
+              <path d="M57 107 L63 107 L60 113 Z" fill="#991b1b"/>
+              <path d="M59.2 113 Q60 132 59.5 136" stroke="rgba(255,100,100,0.3)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+
+              <!-- Pañuelo de bolsillo -->
+              <path d="M24 110 L34 110 L34 120 L24 120 Z" fill="#2563eb" opacity="0.9"/>
+              <path d="M24 110 Q29 104 34 110" fill="#60a5fa"/>
+              <path d="M24 110 Q27 106 30 104 Q33 106 34 110" fill="#93c5fd" opacity="0.7"/>
+
+              <!-- Botones del saco -->
+              <circle cx="60" cy="140" r="2.5" fill="#0f2040"/>
+              <circle cx="60" cy="152" r="2.5" fill="#0f2040"/>
+
+              <!-- ── Brazos ── -->
+              <!-- Brazo izquierdo -->
+              <path d="M22 106 Q12 112 10 126 L12 152 Q13 159 21 160 L29 160 Q36 158 36 150 L34 124 Q31 110 22 106 Z" fill="url(#jacketGrad)"/>
+              <rect x="10" y="153" width="21" height="5" rx="2.5" fill="#152a47"/>
+              <!-- Brazo derecho -->
+              <path d="M98 106 Q108 112 110 126 L108 152 Q107 159 99 160 L91 160 Q84 158 84 150 L86 124 Q89 110 98 106 Z" fill="url(#jacketGrad)"/>
+              <rect x="89" y="153" width="21" height="5" rx="2.5" fill="#152a47"/>
+
+              <!-- ── Manos ── -->
+              <circle cx="21" cy="163" r="8.5" fill="#fbbf24"/>
+              <circle cx="99" cy="163" r="8.5" fill="#fbbf24"/>
+              <!-- Nudillos izquierda -->
+              <path d="M14 161 Q16 165 14 169" stroke="#e59e0a" stroke-width="1" fill="none" opacity="0.45" stroke-linecap="round"/>
+              <!-- Nudillos derecha -->
+              <path d="M106 161 Q104 165 106 169" stroke="#e59e0a" stroke-width="1" fill="none" opacity="0.45" stroke-linecap="round"/>
+
+              <!-- ── Maletín ── -->
+              <rect x="88" y="157" width="26" height="19" rx="4" fill="#92400e"/>
+              <rect x="95" y="152" width="12" height="7" rx="3" fill="none" stroke="#b45309" stroke-width="2.5"/>
+              <rect x="88" y="165" width="26" height="2.5" fill="#78350f"/>
+              <rect x="96" y="162" width="8" height="5" rx="2" fill="#d97706"/>
+              <path d="M90 159 L96 159" stroke="rgba(255,255,255,0.2)" stroke-width="1.5" stroke-linecap="round"/>
+
+              <!-- ── Cuello ── -->
+              <path d="M51 90 Q51 100 60 100 Q69 100 69 90 L69 86 L51 86 Z" fill="#fbbf24"/>
+
+              <!-- ── Cabeza ── -->
+              <circle cx="60" cy="62" r="28" fill="url(#faceGrad)"/>
+
+              <!-- Orejas -->
+              <ellipse cx="32" cy="64" rx="5" ry="6.5" fill="#fbbf24"/>
+              <ellipse cx="88" cy="64" rx="5" ry="6.5" fill="#fbbf24"/>
+              <ellipse cx="32" cy="64" rx="3" ry="4"   fill="#e59e0a" opacity="0.35"/>
+              <ellipse cx="88" cy="64" rx="3" ry="4"   fill="#e59e0a" opacity="0.35"/>
+
+              <!-- ── Cabello ── -->
+              <!-- Masa principal (detrás) -->
+              <path d="M34 54 Q32 30 60 28 Q88 30 86 54 Q83 36 60 34 Q37 36 34 54 Z" fill="#1e293b"/>
+              <!-- Fleco con partido al lado -->
+              <path d="M34 52 Q36 34 60 32 Q80 33 84 46 Q76 36 60 36 Q42 38 36 52 Z" fill="#334155"/>
+              <!-- Mechón frontal (partido izquierdo) -->
+              <path d="M42 34 Q52 30 60 32 Q54 34 48 38 Q44 36 42 34 Z" fill="#475569"/>
+              <!-- Patilla izquierda -->
+              <path d="M33 54 Q31 60 33 70 Q35 62 36 56 Z" fill="#1e293b"/>
+              <!-- Patilla derecha -->
+              <path d="M87 54 Q89 60 87 70 Q85 62 84 56 Z" fill="#1e293b"/>
+              <!-- Brillo del cabello -->
+              <path d="M46 33 Q55 31 64 33" stroke="rgba(255,255,255,0.1)" stroke-width="2" fill="none" stroke-linecap="round"/>
+
+              <!-- ── Ojos ── -->
+              <!-- Blanco izquierdo -->
+              <ellipse cx="47" cy="62" rx="9" ry="8" fill="white"/>
+              <!-- Blanco derecho -->
+              <ellipse cx="73" cy="62" rx="9" ry="8" fill="white"/>
+              <!-- Iris izquierdo -->
+              <circle cx="47" cy="63" r="5.5" fill="#7c4b1e"/>
+              <circle cx="73" cy="63" r="5.5" fill="#7c4b1e"/>
+              <!-- Pupila -->
+              <circle cx="47" cy="63" r="3"   fill="#120800"/>
+              <circle cx="73" cy="63" r="3"   fill="#120800"/>
+              <!-- Brillo principal -->
+              <circle cx="49.5" cy="60.5" r="2" fill="white"/>
+              <circle cx="75.5" cy="60.5" r="2" fill="white"/>
+              <!-- Brillo secundario -->
+              <circle cx="44.5" cy="65"   r="1" fill="rgba(255,255,255,0.45)"/>
+              <circle cx="70.5" cy="65"   r="1" fill="rgba(255,255,255,0.45)"/>
+              <!-- Párpado superior -->
+              <path d="M38 58 Q47 55 56 58" stroke="#1e293b" stroke-width="2" fill="none" stroke-linecap="round"/>
+              <path d="M64 58 Q73 55 82 58" stroke="#1e293b" stroke-width="2" fill="none" stroke-linecap="round"/>
+
+              <!-- ── Cejas ── -->
+              <path d="M38 52 Q47 48 56 52" stroke="#1e293b" stroke-width="2.8" fill="none" stroke-linecap="round"/>
+              <path d="M64 52 Q73 48 82 52" stroke="#1e293b" stroke-width="2.8" fill="none" stroke-linecap="round"/>
+
+              <!-- ── Nariz ── -->
+              <path d="M57 71 Q60 75 63 71" stroke="#e59e0a" stroke-width="1.8" fill="none" stroke-linecap="round" opacity="0.65"/>
+              <circle cx="57" cy="71.5" r="1.5" fill="#d97706" opacity="0.4"/>
+              <circle cx="63" cy="71.5" r="1.5" fill="#d97706" opacity="0.4"/>
+
+              <!-- ── Boca ── -->
+              <!-- Sombra boca -->
+              <path d="M48 79 Q60 91 72 79 Q65 87 60 88 Q55 87 48 79 Z" fill="#c2440a"/>
+              <!-- Dientes -->
+              <path d="M51 80 Q60 89 69 80 Q65 85 60 86 Q55 85 51 80 Z" fill="white"/>
+              <!-- Línea de sonrisa -->
+              <path d="M48 79 Q60 91 72 79" stroke="#92400e" stroke-width="2" fill="none" stroke-linecap="round"/>
+
+              <!-- ── Mejillas ── -->
+              <circle cx="35" cy="71" r="7"  fill="#fca5a5" opacity="0.38"/>
+              <circle cx="85" cy="71" r="7"  fill="#fca5a5" opacity="0.38"/>
+            </svg>
+          </div>
+
+          <!-- Elemento oculto requerido por main.js -->
           <span id="desk-icon"><i data-lucide="monitor" class="gi"></i></span>
-          <p id="click-hint">Haz clic para ganar</p>
+          <p id="click-hint">Toca para ganar</p>
           <p id="click-income">+1 luca</p>
         </div>
       </div>
-      <div id="news-panel">
-        <h3><i data-lucide="newspaper" class="gi"></i> Noticias de empresa</h3>
+
+      <!-- news-feed oculto: requerido por news.js pero no visible -->
+      <div id="news-panel" style="display:none !important">
+        <h3>Noticias</h3>
         <div id="news-feed"></div>
       </div>
+
+      <!-- Toast de notificación: aparece 3s debajo del avatar -->
+      <div id="notif-toast"></div>
+
     </aside>
 
-    <!-- PANEL DERECHO: tabs internas -->
-    <section id="panel-right">
+    <!-- Modal de notificaciones: pantalla completa dentro del juego -->
+    <div id="notif-panel">
+      <div class="notif-panel-header">
+        <span class="notif-panel-title">
+          <i data-lucide="bell" class="gi"></i> Noticias de empresa
+        </span>
+        <button id="btn-notif-close" class="notif-close-btn">
+          <i data-lucide="x" class="gi"></i>
+        </button>
+      </div>
+      <div id="notif-list"></div>
+    </div>
 
-      <!-- Barra de tabs interna -->
+    <!-- BOTTOM SHEET — panel de juego (tabs) -->
+    <section id="panel-right">
+      <!-- Handle para arrastrar / cerrar -->
+      <div id="sheet-handle">
+        <div class="handle-bar"></div>
+      </div>
+
+      <!-- Tabs internas -->
       <nav id="right-tabs">
         <button class="rtab-btn active" data-rtab="rtab-empresa">
           <i data-lucide="briefcase" class="gi"></i> Empresa
@@ -77,18 +284,16 @@
         </button>
       </nav>
 
-      <!-- Pestaña 1: Empresa (misiones, mejoras, departamentos) -->
+      <!-- Pestaña 1: Empresa -->
       <div id="rtab-empresa" class="rtab-pane active">
         <div id="missions-section" style="display:none;">
           <h2><i data-lucide="clipboard-list" class="gi"></i> Misiones activas</h2>
           <div id="missions-list"></div>
         </div>
-
         <div id="upgrades-section" style="display:none;">
           <h2><i data-lucide="zap" class="gi"></i> Mejoras disponibles</h2>
           <div id="upgrades-list"></div>
         </div>
-
         <div id="departments-section">
           <h2><i data-lucide="building" class="gi"></i> Departamentos</h2>
           <div id="departments-list"></div>
@@ -112,11 +317,11 @@
           <div id="achievements-grid"></div>
         </div>
       </div>
-
     </section>
-  </div>
 
-  <!-- Toast container para logros -->
+  </div><!-- #game -->
+
+  <!-- Toast container -->
   <div id="achievement-toast-container"></div>
 
   <!-- Modal de prestige -->
@@ -143,14 +348,14 @@
     </div>
   </div>
 
-  <!-- Tooltip de recursos (position:fixed, escapa del overflow-x:auto del resource-bar) -->
+  <!-- Tooltip de recursos -->
   <div id="res-tooltip"></div>
 
-  <!-- Navegación inferior (visible solo en móvil) -->
+  <!-- Navegación inferior — siempre visible -->
   <nav id="mobile-tabs">
     <button class="tab-btn active" data-tab="panel-left">
-      <span class="tab-icon"><i data-lucide="monitor" class="gi"></i></span>
-      <span>Oficina</span>
+      <span class="tab-icon"><i data-lucide="home" class="gi"></i></span>
+      <span>Lobby</span>
     </button>
     <button class="tab-btn" data-tab="panel-right">
       <span class="tab-icon"><i data-lucide="briefcase" class="gi"></i></span>
@@ -158,10 +363,14 @@
     </button>
   </nav>
 
-  <!-- Lucide Icons (SVG vectorizados) -->
-  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <!-- Lucide Icons -->
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.469.0/dist/umd/lucide.min.js"></script>
+  <!-- PixiJS para partículas y efectos -->
+  <script src="https://cdn.jsdelivr.net/npm/pixi.js@8/dist/pixi.min.js"></script>
+  <!-- dotLottie web component para avatar animado (.lottie format) -->
+  <script type="module" src="https://cdn.jsdelivr.net/npm/@lottiefiles/dotlottie-wc@latest/dist/dotlottie-wc.js"></script>
 
-  <!-- Scripts: orden de carga importa -->
+  <!-- Game logic (no tocar) -->
   <script src="js/state.js"></script>
   <script src="js/departments.js"></script>
   <script src="js/upgrades.js"></script>
@@ -174,6 +383,11 @@
   <script src="js/news.js"></script>
   <script src="js/prestige.js"></script>
   <script src="js/ui.js"></script>
+  <!-- Visual layer (carga después de lógica) -->
+  <script src="js/avatar.js"></script>
+  <script src="js/avatar-lottie.js"></script>
+  <script src="js/scene.js"></script>
+  <script src="js/notifications.js"></script>
   <script src="js/main.js"></script>
 
 </body>
