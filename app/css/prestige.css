@@ -10,7 +10,7 @@
 }
 
 .prestige-modal-box {
-  background: var(--bg-secondary);
+  background: #1c1408;
   border: 2px solid #f59e0b;
   border-radius: 12px;
   padding: 2rem;
@@ -33,7 +33,7 @@
 }
 
 .prestige-modal-box > p {
-  color: var(--text-muted);
+  color: #c9a96e;
   font-size: .9rem;
   margin-bottom: 1rem;
   line-height: 1.5;
@@ -47,7 +47,7 @@
   padding: .75rem 1rem;
   margin-bottom: .75rem;
   font-size: 1rem;
-  color: var(--text-muted);
+  color: #c9a96e;
 }
 
 .prestige-reward strong {
@@ -59,7 +59,7 @@
 }
 
 .prestige-after {
-  color: var(--text-muted);
+  color: #c9a96e;
   font-size: .9rem;
   margin-bottom: 1.25rem;
 }
