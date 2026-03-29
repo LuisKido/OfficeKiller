@@ -71,7 +71,8 @@ const ui = {
             <span class="dept-cap-label">${qty}/${cap}</span>
             ${showExpBtn ? `
               <button class="btn-expand ${canBuyExp ? 'ready' : ''}"
-                      onclick="buyExpansion('${dept.id}')"
+                      data-action="buy-expansion"
+                      data-id="${dept.id}"
                       title="Expande hasta ${nextCap} unidades"
                       ${canBuyExp ? '' : 'disabled'}>
                 ${gi('lock-open')} ×${nextMult.toFixed(1)}
@@ -84,7 +85,8 @@ const ui = {
         <div class="dept-right">
           <span class="dept-qty">${qty}</span>
           <button class="btn-buy"
-                  onclick="buyDepartment('${dept.id}')"
+                  data-action="buy-dept"
+                  data-id="${dept.id}"
                   ${canAfford && !atCap ? '' : 'disabled'}>
             ${atCap ? 'Cap. máx.' : formatLucas(price)}
             ${!atCap ? `<span class="btn-buy-delta">+${formatLucas(incomePerUnit)}/s</span>` : ''}

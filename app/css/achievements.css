@@ -212,6 +212,8 @@
   text-align: center;
   transition: background 0.15s, transform 0.1s;
   min-height: 32px;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
 }
 
 /* Cuando está listo para comprar (at cap + afford) */
@@ -220,11 +222,12 @@
   border-color: transparent;
   color: #fff;
   animation: expand-pulse 2s ease-in-out infinite;
+  will-change: transform;
 }
 
 @keyframes expand-pulse {
-  0%, 100% { box-shadow: 0 0 0 0   rgba(124, 58, 237, .6); }
-  50%       { box-shadow: 0 0 0 6px rgba(124, 58, 237, 0);  }
+  0%, 100% { transform: scale(1);    filter: brightness(1); }
+  50%       { transform: scale(1.05); filter: brightness(1.2); }
 }
 
 .btn-expand.ready:hover {

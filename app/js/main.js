@@ -48,6 +48,48 @@ function gi(name, extraClass) {
   return ICON_SVG[key] || '';
 }
 
+// ── Hold-to-buy en departamentos ────────────────────────────
+function initHoldToBuy() {
+  const list = document.getElementById('departments-list');
+  if (!list) return;
+
+  let holdTimer   = null;
+  let repeatTimer = null;
+  let activeBtn   = null;
+
+  const stop = () => {
+    clearTimeout(holdTimer);
+    clearInterval(repeatTimer);
+    holdTimer = repeatTimer = null;
+    if (activeBtn) { activeBtn.classList.remove('holding'); activeBtn = null; }
+  };
+
+  list.addEventListener('pointerdown', (e) => {
+    const btn = e.target.closest('[data-action]');
+    if (!btn || btn.disabled) return;
+    e.preventDefault();
+
+    const action = btn.dataset.action;
+    const id     = btn.dataset.id;
+    const fire   = () => {
+      if (action === 'buy-dept')           buyDepartment(id);
+      else if (action === 'buy-expansion') buyExpansion(id);
+    };
+
+    stop();
+    activeBtn = btn;
+    btn.classList.add('holding');
+    fire();
+
+    holdTimer = setTimeout(() => {
+      repeatTimer = setInterval(fire, 150);
+    }, 500);
+  });
+
+  document.addEventListener('pointerup',     stop);
+  document.addEventListener('pointercancel', stop);
+}
+
 // ── Tooltip de recursos ────────────────────────────────────
 function initResTooltip() {
   const tip = document.getElementById('res-tooltip');
@@ -179,6 +221,8 @@ function init() {
   initRightTabs();
   // Tooltip de recursos
   initResTooltip();
+  // Hold-to-buy en departamentos
+  initHoldToBuy();
   // ── Clic en el escritorio ───────────────────────────────
   document.getElementById('desk').addEventListener('click', (e) => {
     const income = calculateClickIncome(state);

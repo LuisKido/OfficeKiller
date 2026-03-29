@@ -99,6 +99,8 @@
   transition: background 0.15s, transform 0.1s;
   min-width: 84px;
   text-align: center;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .btn-buy:hover:not(:disabled) {
@@ -106,8 +108,10 @@
   transform: translateY(-1px);
 }
 
-.btn-buy:active:not(:disabled) {
-  transform: translateY(0);
+.btn-buy:active:not(:disabled),
+.btn-buy.holding:not(:disabled) {
+  transform: scale(0.94);
+  filter: brightness(0.9);
 }
 
 .btn-buy:disabled {
