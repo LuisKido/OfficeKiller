@@ -24,66 +24,29 @@ const Avatar = (() => {
   }
 
   function _patchGlobals() {
-    // Esperar a que las funciones globales estén definidas (las define main.js + dept/upgrade JS)
-    // Se ejecuta después de DOMContentLoaded ya que avatar.js carga antes que main.js
-    // Usamos un pequeño timeout para asegurar que main.js ya haya corrido
-    setTimeout(() => {
-      if (typeof window.buyDepartment === 'function') {
-        const orig = window.buyDepartment;
-        window.buyDepartment = function(...args) {
-          const result = orig.apply(this, args);
-          setState('earn');
-          spawnCoinParticles(2);
-          return result;
-        };
-      }
-
-      if (typeof window.buyUpgrade === 'function') {
-        const orig = window.buyUpgrade;
-        window.buyUpgrade = function(...args) {
-          const result = orig.apply(this, args);
-          setState('earn');
-          spawnCoinParticles(3);
-          return result;
-        };
-      }
-
-      if (typeof window.buyExpansion === 'function') {
-        const orig = window.buyExpansion;
-        window.buyExpansion = function(...args) {
-          const result = orig.apply(this, args);
-          setState('earn');
-          spawnCoinParticles(4);
-          return result;
-        };
-      }
-
-      if (typeof window.buyResearch === 'function') {
-        const orig = window.buyResearch;
-        window.buyResearch = function(...args) {
-          const result = orig.apply(this, args);
-          setState('earn');
-          spawnCoinParticles(3);
-          return result;
-        };
-      }
-
-      if (typeof window.completeMission === 'function') {
-        const orig = window.completeMission;
-        window.completeMission = function(...args) {
-          const result = orig.apply(this, args);
-          setState('earn');
-          spawnCoinParticles(5);
-          return result;
-        };
-      }
-    }, 200);
+    const patch = (name, earnState, coins) => {
+      const orig = window[name];
+      if (typeof orig !== 'function') return;
+      window[name] = function(...args) {
+        const result = orig.apply(this, args);
+        setState(earnState);
+        spawnCoinParticles(coins);
+        return result;
+      };
+    };
+    patch('buyDepartment',   'earn', 2);
+    patch('buyUpgrade',      'earn', 3);
+    patch('buyExpansion',    'earn', 4);
+    patch('buyResearch',     'earn', 3);
+    patch('completeMission', 'earn', 5);
   }
 
   function setState(newState) {
     if (!el) return;
     clearTimeout(timer);
     el.setAttribute('data-state', newState);
+    // Propagar al controlador Lottie si está activo
+    if (typeof AvatarLottie !== 'undefined') AvatarLottie.setState(newState);
 
     const duration = newState === 'prestige' ? 1400 : newState === 'earn' ? 700 : 480;
     if (newState !== 'idle') {

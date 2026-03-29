@@ -41,7 +41,6 @@ const AvatarLottie = (() => {
     // El web component dispara 'ready' cuando está listo
     player.addEventListener('ready', () => {
       ready = true;
-      _patchAvatarGlobals();
       console.info('[AvatarLottie] ✓ Animación cargada');
     });
 
@@ -74,34 +73,6 @@ const AvatarLottie = (() => {
   }
 
   function onPrestige() { setState('prestige'); }
-
-  // ── Patch funciones globales de compra ──────────────────────
-  function _patchAvatarGlobals() {
-    const patch = (name, state, coins) => {
-      const orig = window[name];
-      if (typeof orig !== 'function') return;
-      window[name] = function(...args) {
-        const r = orig.apply(this, args);
-        setState(state);
-        Avatar.spawnCoinParticles(coins);
-        return r;
-      };
-    };
-    patch('buyDepartment',   'earn', 2);
-    patch('buyUpgrade',      'earn', 3);
-    patch('buyExpansion',    'earn', 4);
-    patch('buyResearch',     'earn', 3);
-    patch('completeMission', 'earn', 5);
-
-    const desk = document.getElementById('desk');
-    if (desk) desk.addEventListener('click', () => {
-      setState('click');
-      Avatar.spawnCoinParticles(1);
-    });
-
-    const confirmBtn = document.querySelector('.btn-prestige-confirm');
-    if (confirmBtn) confirmBtn.addEventListener('click', () => setTimeout(onPrestige, 200));
-  }
 
   // ── Helper ──────────────────────────────────────────────────
   async function _fileExists(url) {
