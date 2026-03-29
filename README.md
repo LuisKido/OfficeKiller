@@ -2,7 +2,7 @@
 
 > Juego idle de navegador. Construye tu empresa desde cero, gana lucas y mata el tiempo de oficina.
 
-🎮 **[Jugar ahora](https://TU_USUARIO.github.io/OfficeKiller/)** &nbsp;·&nbsp; Sin instalación · Corre 100% en el navegador
+🎮 **[Jugar ahora](https://LuisKido.github.io/OfficeKiller/)** &nbsp;·&nbsp; Sin instalación · Corre 100% en el navegador
 
 ---
 
