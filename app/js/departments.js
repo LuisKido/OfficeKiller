@@ -109,7 +109,12 @@ function getExpandCost(dept, currentLevel) {
   return Math.floor(dept.basePrice * EXPAND_COST_MULT[currentLevel + 1]);
 }
 
+const _buyDeptLast = {};
 function buyDepartment(deptId) {
+  const now = Date.now();
+  if (now - (_buyDeptLast[deptId] || 0) < 300) return;
+  _buyDeptLast[deptId] = now;
+
   const dept = DEPARTMENTS.find(d => d.id === deptId);
   if (!dept) return;
 
@@ -130,7 +135,12 @@ function buyDepartment(deptId) {
   checkAchievements(state);
 }
 
+const _buyExpLast = {};
 function buyExpansion(deptId) {
+  const now = Date.now();
+  if (now - (_buyExpLast[deptId] || 0) < 300) return;
+  _buyExpLast[deptId] = now;
+
   const dept = DEPARTMENTS.find(d => d.id === deptId);
   if (!dept) return;
 
