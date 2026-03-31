@@ -16,21 +16,27 @@
 <body>
 
   <header id="header">
-    <h1><i data-lucide="building-2" class="gi"></i></h1>
+    <h1><i data-lucide="building-2" class="gi"></i> <span class="app-title">Office Killer</span></h1>
     <div class="header-stats">
+      <!-- Pills para móvil, stat-blocks en desktop -->
       <div class="hud-pill">
         <i data-lucide="wallet" class="gi hud-icon"></i>
         <span id="balance-display">0</span>
+        <span class="pill-label">Balance</span>
       </div>
       <div class="hud-pill hud-green">
         <i data-lucide="trending-up" class="gi hud-icon"></i>
         <span id="income-display">0/s</span>
+        <span class="pill-label">Ganando</span>
       </div>
-      <!-- total-display oculto pero requerido por ui.js -->
-      <span id="total-display" style="display:none">0</span>
-      <div class="hud-pill hud-prestige" id="prestige-stat" style="display:none">
-        <i data-lucide="star" class="gi hud-icon"></i>
-        <span id="prestige-mult-display">×1.00</span>
+      <!-- Stats con etiqueta para desktop -->
+      <div class="stat stat-desktop">
+        <span class="stat-label">Total ganado</span>
+        <span class="stat-value dim" id="total-display">0</span>
+      </div>
+      <div class="stat stat-desktop" id="prestige-stat" style="display:none">
+        <span class="stat-label">Acciones</span>
+        <span class="stat-value prestige-mult" id="prestige-mult-display">×1.00</span>
       </div>
     </div>
     <div class="header-actions">
@@ -39,9 +45,18 @@
         <i data-lucide="bell" class="gi"></i>
         <span id="notif-badge" class="notif-badge" style="display:none">0</span>
       </button>
-      <button id="btn-save"     class="btn-icon" title="Guardar"><i data-lucide="save"    class="gi"></i></button>
-      <button id="btn-prestige" class="btn-icon btn-prestige-hud" style="display:none" title="Prestige"><i data-lucide="star" class="gi"></i></button>
-      <button id="btn-reset"    class="btn-icon btn-danger-icon"  title="Reiniciar"><i data-lucide="trash-2" class="gi"></i></button>
+      <button id="btn-save" class="btn-icon btn-secondary-desktop" title="Guardar">
+        <i data-lucide="save" class="gi"></i>
+        <span class="btn-label">Guardar</span>
+      </button>
+      <button id="btn-prestige" class="btn-icon btn-prestige-hud" style="display:none" title="Prestige">
+        <i data-lucide="star" class="gi"></i>
+        <span class="btn-label">Prestige</span>
+      </button>
+      <button id="btn-reset" class="btn-icon btn-danger-icon btn-danger-desktop" title="Reiniciar">
+        <i data-lucide="trash-2" class="gi"></i>
+        <span class="btn-label">Reiniciar</span>
+      </button>
     </div>
   </header>
 
@@ -233,16 +248,16 @@
             </svg>
           </div>
 
-          <!-- Elemento oculto requerido por main.js -->
+              <!-- Elemento requerido por main.js, visible en desktop -->
           <span id="desk-icon"><i data-lucide="monitor" class="gi"></i></span>
-          <p id="click-hint">Toca para ganar</p>
+          <p id="click-hint">Haz clic para ganar</p>
           <p id="click-income">+1 luca</p>
         </div>
       </div>
 
-      <!-- news-feed oculto: requerido por news.js pero no visible -->
-      <div id="news-panel" style="display:none !important">
-        <h3>Noticias</h3>
+      <!-- news-panel: ticker en móvil, panel lateral en desktop -->
+      <div id="news-panel">
+        <h3><i data-lucide="newspaper" class="gi"></i> <span class="news-title">Noticias de empresa</span></h3>
         <div id="news-feed"></div>
       </div>
 

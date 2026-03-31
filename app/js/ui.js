@@ -59,6 +59,7 @@ const ui = {
         <div class="dept-icon">${dept.icon}</div>
         <div class="dept-info">
           <div class="dept-name">${dept.name}</div>
+          ${qty > 0 ? `<div class="dept-employees">${getEmployeeNames(dept.id, qty)}</div>` : ''}
           <div class="dept-desc">${dept.description}</div>
           ${qty > 0 ? `<div class="dept-prod">
             ▲ ${formatLucas(deptIncome)}/s

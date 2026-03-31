@@ -51,6 +51,16 @@
   line-height: 1.2;
 }
 
+.dept-employees {
+  font-size: 10px;
+  color: var(--text-muted);
+  margin-top: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 180px;
+}
+
 .dept-desc {
   font-size: 11px;
   color: var(--text-muted);
