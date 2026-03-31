@@ -108,6 +108,73 @@ const UPGRADES_DATA = [
     condition: (s) => s.departments.multinacional >= 5,
     effect: { type: 'global_multiplier', target: 'global', value: 10 },
   },
+
+  // ── Departamentos sin upgrade (Legal, Dirección, Sede, Multinacional) ──
+  {
+    id: 'U13',
+    name: 'Bufete de socios',
+    icon: '<i data-lucide="scale" class="gi"></i>',
+    description: '×2 producción de Legal.',
+    cost: 1500000,
+    condition: (s) => s.departments.legal >= 10,
+    effect: { type: 'dept_multiplier', target: 'legal', value: 2 },
+  },
+  {
+    id: 'U14',
+    name: 'Sala de directorio',
+    icon: '<i data-lucide="presentation" class="gi"></i>',
+    description: '×2 producción de Dirección.',
+    cost: 6000000,
+    condition: (s) => s.departments.direccion >= 10,
+    effect: { type: 'dept_multiplier', target: 'direccion', value: 2 },
+  },
+  {
+    id: 'U15',
+    name: 'Certificación ISO',
+    icon: '<i data-lucide="badge-check" class="gi"></i>',
+    description: '×3 producción de Sede Central.',
+    cost: 25000000,
+    condition: (s) => s.departments.sede >= 10,
+    effect: { type: 'dept_multiplier', target: 'sede', value: 3 },
+  },
+  {
+    id: 'U16',
+    name: 'Adquisición corporativa',
+    icon: '<i data-lucide="globe-2" class="gi"></i>',
+    description: '×3 producción de Multinacional.',
+    cost: 200000000,
+    condition: (s) => s.departments.multinacional >= 10,
+    effect: { type: 'dept_multiplier', target: 'multinacional', value: 3 },
+  },
+
+  // ── Upgrades de clic (progresión) ──
+  {
+    id: 'U17',
+    name: 'Teclado mecánico',
+    icon: '<i data-lucide="keyboard" class="gi"></i>',
+    description: '×3 ganancias por clic.',
+    cost: 2000,
+    condition: (s) => s.totalClicks >= 100,
+    effect: { type: 'click_multiplier', target: 'click', value: 3 },
+  },
+  {
+    id: 'U18',
+    name: 'Setup gamer-office',
+    icon: '<i data-lucide="monitor-dot" class="gi"></i>',
+    description: '×5 ganancias por clic.',
+    cost: 500000,
+    condition: (s) => s.totalClicks >= 1000,
+    effect: { type: 'click_multiplier', target: 'click', value: 5 },
+  },
+  {
+    id: 'U19',
+    name: 'El trono del CEO',
+    icon: '<i data-lucide="crown" class="gi"></i>',
+    description: '×10 ganancias por clic.',
+    cost: 20000000,
+    condition: (s) => s.totalClicks >= 5000,
+    effect: { type: 'click_multiplier', target: 'click', value: 10 },
+  },
 ];
 
 function buyUpgrade(upgradeId) {
