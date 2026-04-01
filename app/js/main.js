@@ -282,6 +282,16 @@ function init() {
 
   // Guardar al cerrar pestaña
   window.addEventListener('beforeunload', saveGame);
+
+  // ── Modal de bienvenida (una sola vez por usuario) ─────
+  if (!localStorage.getItem('ok_welcome_seen')) {
+    const wm = document.getElementById('welcome-modal');
+    wm.style.display = 'flex';
+    document.getElementById('btn-welcome-close').addEventListener('click', () => {
+      wm.style.display = 'none';
+      localStorage.setItem('ok_welcome_seen', '1');
+    });
+  }
 }
 
 document.addEventListener('DOMContentLoaded', init);
